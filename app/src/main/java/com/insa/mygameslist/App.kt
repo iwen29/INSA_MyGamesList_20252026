@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -21,9 +22,10 @@ fun App() {
     val viewModel : GameViewModel = viewModel()
 
     var searchQuery by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        viewModel.loadGames()
+        viewModel.loadGames(context = context)
     }
 
     MyGamesListTheme {
@@ -35,6 +37,7 @@ fun App() {
                 "list"
             ) {
                 GameList(
+                    context = context,
                     viewModel = viewModel,
                     onGameClicked = { gameId ->
                         navController.navigate("game/$gameId")
@@ -48,7 +51,7 @@ fun App() {
             ) { backStackEntry ->
                 val gameId = backStackEntry.arguments?.getString("gameId")?.toLongOrNull()
                 if (gameId != null) {
-                    GamePage(gameId = gameId,viewModel = viewModel,)
+                    GamePage(context, gameId = gameId,viewModel = viewModel,)
                 }
             }
         }
