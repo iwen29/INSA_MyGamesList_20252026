@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.insa.mygameslist.components.GameCard
+import com.insa.mygameslist.data.Game
 import com.insa.mygameslist.view.GameViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,12 +48,11 @@ fun GameList(
     viewModel: GameViewModel,
     onGameClicked: (Long) -> Unit,
     query: String,
-    onQueryChange: (String) -> Unit
+    onQueryChange: (String) -> Unit,
+    games: List<Game>
 ) {
     var searchOpen by remember { mutableStateOf(query != "") }
     val focusRequester = remember { FocusRequester() }
-    val gamesState = viewModel.games.collectAsState()
-    val games = gamesState.value
 
     LaunchedEffect(searchOpen) {
         if (searchOpen) {
@@ -60,13 +60,7 @@ fun GameList(
         }
     }
     var previousFocusState by remember { mutableStateOf(false) }
-    val filteredGames = (if (query.isNotEmpty()) {
-        games.filter { game ->
-            game.name.contains(query, ignoreCase = true) || game.genres.any { it.name.contains(query, ignoreCase = true) } || game.platforms.any { it.name.contains(query, ignoreCase = true) }
-        }
-    } else {
-        games
-    }).sortedBy { it.name }.sortedBy { !it.isFavorite }
+
     BackHandler(enabled = searchOpen) {
         searchOpen = false
         onQueryChange("")
@@ -128,7 +122,7 @@ fun GameList(
             modifier =  Modifier.padding(innerPadding)
         ){
             items(
-                items = filteredGames,
+                items = games,
                 key = { it.id }
             ) { game ->
                 GameCard(
@@ -138,7 +132,7 @@ fun GameList(
                     modifier = Modifier.animateItem()
                 )
             }
-            if (filteredGames.isEmpty()) {
+            if (games.isEmpty()) {
                 item {
                     Text(
                         text = "No games found",
