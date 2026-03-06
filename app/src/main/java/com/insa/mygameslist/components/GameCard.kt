@@ -55,7 +55,9 @@ fun GameCard(game: Game, onClick: () -> Unit, onFavoriteClick : () -> Unit, modi
                     text = game.name,
                     textDecoration = TextDecoration.Underline,
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = "Genres : ${game.genres.joinToString(", ") { it.name }}",
