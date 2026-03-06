@@ -1,5 +1,6 @@
 package com.insa.mygameslist.pages
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -47,7 +48,7 @@ import com.insa.mygameslist.view.GameViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GamePage(gameId: Long, viewModel: GameViewModel) {
+fun GamePage(context: Context, gameId: Long, viewModel: GameViewModel) {
     val games by viewModel.games.collectAsState()
     val game = games.find { it.id == gameId }
 
@@ -84,7 +85,7 @@ fun GamePage(gameId: Long, viewModel: GameViewModel) {
                     )
 
                     IconButton(
-                        onClick = { viewModel.toggleFavorite(game.id) }
+                        onClick = { viewModel.toggleFavorite(context, game.id) }
                     ) {
                         Icon(
                             imageVector = if (game.isFavorite) Icons.Filled.Star else Icons.Outlined.StarBorder,

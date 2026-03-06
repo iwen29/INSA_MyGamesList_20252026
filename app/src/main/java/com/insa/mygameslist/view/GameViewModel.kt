@@ -29,13 +29,38 @@ class GameViewModel : ViewModel() {
         }
     }
 
-    fun toggleFavorite(gameId: Long) {
+    fun toggleFavorite(context: Context, gameId: Long) {
         _games.update { list ->
             list.map { game ->
-                if (game.id == gameId)
+                if (game.id == gameId) {
+                    saveFavorite(context, gameId, !game.isFavorite)
                     game.copy(isFavorite = !game.isFavorite)
+                }
                 else game
             }
         }
+    }
+
+    fun loadFavorites(context: Context): List<Long> {
+        val file = File(context.filesDir, "favorites.json")
+        if (!file.exists()) return List<Long>(0) { 0L }
+        return Json.decodeFromString(file.readText())
+    }
+
+    private fun saveFavorite(context: Context, gameId: Long, isFavorite: Boolean) {
+        val favorites = loadFavorites(context).toMutableList()
+
+        if (isFavorite) {
+            if (!favorites.contains(gameId)) {
+                favorites += gameId
+            }
+        } else {
+            if (favorites.contains(gameId)) {
+                favorites -= gameId
+            }
+        }
+
+        val file = File(context.filesDir, "favorites.json")
+        file.writeText(Json.encodeToString(favorites))
     }
 }
