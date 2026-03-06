@@ -1,5 +1,6 @@
 package com.insa.mygameslist.view
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.insa.mygameslist.data.Game
@@ -10,6 +11,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
+import java.io.File
 
 class GameViewModel : ViewModel() {
     private val repository = GameRepository()
