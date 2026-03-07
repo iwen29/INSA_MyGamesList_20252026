@@ -6,49 +6,41 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface IGDBAPI {
-    @Headers(
-        "Client-ID: nbgd9yqjfllcrcqjjdedtqkdt0rbz6",
-        "Authorization: Bearer jy6renofyduikl6xqy8kzuynhsc277"
-    )
+
+
 
     @POST("games")
     suspend fun getGames(
+        @Header("Client-ID") clientId: String,
+        @Header("Authorization") authorization: String,
         @Body body: RequestBody
     ): List<GameAPI>
 
-    @Headers(
-        "Client-ID: nbgd9yqjfllcrcqjjdedtqkdt0rbz6",
-        "Authorization: Bearer jy6renofyduikl6xqy8kzuynhsc277"
-    )
     @POST("platforms")
     suspend fun getPlatforms(
+        @Header("Client-ID") clientId: String,
+        @Header("Authorization") authorization: String,
         @Body body: RequestBody
     ): List<PlatformAPI>
 
-    @Headers(
-        "Client-ID: nbgd9yqjfllcrcqjjdedtqkdt0rbz6",
-        "Authorization: Bearer jy6renofyduikl6xqy8kzuynhsc277"
-    )
     @POST("covers")
     suspend fun getCovers(
+        @Header("Client-ID") clientId: String,
+        @Header("Authorization") authorization: String,
         @Body body: RequestBody
     ): List<Cover>
 
-    @Headers(
-        "Client-ID: nbgd9yqjfllcrcqjjdedtqkdt0rbz6",
-        "Authorization: Bearer jy6renofyduikl6xqy8kzuynhsc277"
-    )
     @POST("genres")
     suspend fun getGenres(
+        @Header("Client-ID") clientId: String,
+        @Header("Authorization") authorization: String,
         @Body body: RequestBody
     ) : List<Genre>
 
-    @Headers(
-        "Client-ID: nbgd9yqjfllcrcqjjdedtqkdt0rbz6",
-        "Authorization: Bearer jy6renofyduikl6xqy8kzuynhsc277"
-    )
     @POST("platform_logos")
     suspend fun getLogos(
+        @Header("Client-ID") clientId: String,
+        @Header("Authorization") authorization: String,
         @Body body: RequestBody
     ): List<Logo>
 }

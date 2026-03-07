@@ -11,7 +11,16 @@ import kotlin.time.Clock
 
 class GameRepository {
 
+    val clientID = "nbgd9yqjfllcrcqjjdedtqkdt0rbz6"
+    val clientSecret = "vk89qh4hhsf1s8ggjblq6jqys5dogy"
+
+    suspend fun getToken(): String {
+        return getTwitchToken(clientID, clientSecret)
+    }
+
     suspend fun getGames(): List<Game> {
+
+        val token = getToken()
 
         val query = """
             fields id,name,summary,genres,platforms,cover,first_release_date;
@@ -20,7 +29,7 @@ class GameRepository {
 
         val body = query.toRequestBody("text/plain".toMediaType())
 
-        val apiGames = RetrofitClient.api.getGames(body)
+        val apiGames = RetrofitClient.api.getGames(clientID,"Bearer $token",body)
 
         val coverIds = apiGames.mapNotNull { it.cover }.distinct()
         val platformIds = apiGames.flatMap { it.platforms }.distinct()
@@ -56,8 +65,8 @@ class GameRepository {
     }
 
     private suspend fun getCoversMap(ids: List<Long>): Map<Long, Cover> {
+        val token = getToken()
         if (ids.isEmpty()) return emptyMap()
-        Log.d("CoverIDS", ids.toString())
 
         val query = """
         fields id,url;
@@ -67,19 +76,20 @@ class GameRepository {
 
         val body = query.toRequestBody("text/plain".toMediaType())
 
-        return RetrofitClient.api.getCovers(body)
+        return RetrofitClient.api.getCovers(clientID,"Bearer $token",body)
             .associateBy { it.id }
     }
 
     private suspend fun getGenresMap(): Map<Long, Genre> {
+        val token = getToken()
         val body = "fields id,name;limit 100;".toRequestBody("text/plain".toMediaType())
-        return RetrofitClient.api.getGenres(body).associateBy { it.id }
+        return RetrofitClient.api.getGenres(clientID,"Bearer $token",body).associateBy { it.id }
     }
 
     private suspend fun getPlatformsMap(ids: List<Long>): Map<Long, Platform> {
 
         if (ids.isEmpty()) return emptyMap()
-
+        val token = getToken()
         val queryPlatforms = """
         fields id,name,platform_logo;
         where id = (${ids.joinToString(",")});
@@ -88,13 +98,11 @@ class GameRepository {
 
         val bodyPlatforms = queryPlatforms.toRequestBody("text/plain".toMediaType())
 
-        val platformsAPI = RetrofitClient.api.getPlatforms(bodyPlatforms)
+        val platformsAPI = RetrofitClient.api.getPlatforms(clientID,"Bearer $token",bodyPlatforms)
 
         val logoIds = platformsAPI.mapNotNull { it.platform_logo }.distinct()
 
         val logos = getPlatformLogosMap(logoIds)
-
-        Log.d("LOGOS", logos.toString())
 
         return platformsAPI.map {
             Platform(
@@ -108,7 +116,7 @@ class GameRepository {
     private suspend fun getPlatformLogosMap(ids: List<Long>): Map<Long, Logo> {
 
         if (ids.isEmpty()) return emptyMap()
-
+        val token = getToken()
         val query = """
         fields id,url;
         where id = (${ids.joinToString(",")});
@@ -117,6 +125,6 @@ class GameRepository {
 
         val body = query.toRequestBody("text/plain".toMediaType())
 
-        return RetrofitClient.api.getLogos(body).associateBy { it.id }
+        return RetrofitClient.api.getLogos(clientID,"Bearer $token",body).associateBy { it.id }
     }
 }
