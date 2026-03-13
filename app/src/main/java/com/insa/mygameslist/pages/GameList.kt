@@ -161,7 +161,7 @@ fun GameList(
                 )
             }
         }
-        if (games.isEmpty() && query.isNotEmpty()) {
+        if (games.isEmpty() && (query.isNotEmpty() || tags.isNotEmpty())) {
             Text(
                 text = "No games found",
                 fontSize = 18.sp,
@@ -172,7 +172,7 @@ fun GameList(
                     .padding(16.dp),
                 color = Color.Gray
             )
-        } else if (games.isEmpty()) {
+        } else if (games.isEmpty()) { // This is not the proper way to do this but it works
             CircularProgressIndicator(
                 modifier = Modifier
                     .fillMaxSize()

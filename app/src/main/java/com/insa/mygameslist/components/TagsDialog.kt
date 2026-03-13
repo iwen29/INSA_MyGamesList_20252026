@@ -67,7 +67,9 @@ fun TagsDialog(
                     ),
                     keyboardActions = KeyboardActions(
                         onDone = {
-                            tempTags = tempTags + textInput
+                            if (textInput.isNotBlank()) {
+                                tempTags = tempTags + textInput
+                            }
                             textInput = ""
                         }
                     ),
@@ -119,6 +121,10 @@ fun TagsDialog(
                     }
                     Button(
                         onClick = {
+                            if (textInput.isNotBlank()) { // L'utilisateur s'attendra probablement à ce que le tag soit ajouté même s'il ne l'a pas validé
+                                tempTags = tempTags + textInput
+                            }
+                            textInput = ""
                             setTags(tempTags)
                             onDismissRequest()
                         },

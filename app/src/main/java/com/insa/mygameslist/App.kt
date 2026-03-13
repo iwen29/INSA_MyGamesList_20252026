@@ -36,13 +36,10 @@ fun App() {
     val gamesState = viewModel.games.collectAsState()
     val games = gamesState.value
 
-    val filteredGames = (if (searchQuery.isNotEmpty()) {
-        games.filter { game ->
-            game.name.contains(searchQuery, ignoreCase = true) || game.genres.any { it.name.contains(searchQuery, ignoreCase = true) } || game.platforms.any { it.name.contains(searchQuery, ignoreCase = true) }
-        }
-    } else {
-        games
-    }).sortedBy { it.name }.sortedBy { !it.isFavorite }
+    val filteredGames = games.filter { game -> //TODO: Make platform and rating tags work
+        (searchQuery.isEmpty() || (game.name.contains(searchQuery, ignoreCase = true) || game.genres.any { it.name.contains(searchQuery, ignoreCase = true) } || game.platforms.any { it.name.contains(searchQuery, ignoreCase = true) }))
+                && searchTags.all { tag -> game.genres.any { it.name.equals(tag, ignoreCase = true) } || game.platforms.any { it.name.equals(tag, ignoreCase = true) } }
+    }.sortedBy { it.name }.sortedBy { !it.isFavorite }
 
     val pagerState = rememberPagerState() { filteredGames.size }
     val coroutineScope = rememberCoroutineScope()
@@ -68,10 +65,7 @@ fun App() {
                     query = searchQuery,
                     onQueryChange = { newQuery -> searchQuery = newQuery },
                     tags = searchTags,
-                    setTags = {
-                        Log.d("GamesList", "Updating search tags: $it")
-                        searchTags.apply { clear(); addAll(it) }
-                              },
+                    setTags = { searchTags.apply { clear(); addAll(it) } },
                     games = filteredGames
                 )
             }
