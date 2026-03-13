@@ -48,7 +48,7 @@ fun GameCard(game: Game, onClick: () -> Unit, onFavoriteClick : () -> Unit, modi
                     .size(80.dp)
                     .padding(end = 12.dp),
                 contentScale = ContentScale.Fit,
-                error = painterResource(R.drawable.cover_placeholder)
+                error = painterResource(R.drawable.broken_image)
             )
             Column(modifier = Modifier.weight(1f)) {
                 Text(

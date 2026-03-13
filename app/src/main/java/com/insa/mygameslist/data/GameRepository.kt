@@ -13,11 +13,15 @@ class GameRepository {
 
     val clientID = "nbgd9yqjfllcrcqjjdedtqkdt0rbz6"
     val clientSecret = "vk89qh4hhsf1s8ggjblq6jqys5dogy"
+    private var cachedToken: String? = null
 
     suspend fun getToken(): String {
-        return getTwitchToken(clientID, clientSecret)
+        if (cachedToken == null) {
+            cachedToken = getTwitchToken(clientID, clientSecret)
+        }
+        Log.d("TOKEN",cachedToken!!)
+        return cachedToken!!
     }
-
     suspend fun getGames(): List<Game> {
 
         val token = getToken()
@@ -42,6 +46,9 @@ class GameRepository {
 
             val coverObj = apiGame.cover?.let { covers[it] }
 
+            val coverUrl = coverObj?.url
+                ?.replace("t_thumb", "t_cover_big")
+
             val genreSet = apiGame.genres.mapNotNull { genres[it] }.toSet()
 
             val platformSet = apiGame.platforms.mapNotNull { platforms[it] }.toSet()
@@ -50,7 +57,7 @@ class GameRepository {
                 id = apiGame.id,
                 name = apiGame.name,
                 summary = apiGame.summary ?: "",
-                cover = coverObj ?: Cover(0, ""),
+                cover = coverObj?.copy(url = coverUrl ?: "") ?: Cover(0,""),
                 release = apiGame.first_release_date?.let {
                     kotlin.time.Instant
                         .fromEpochSeconds(it)
@@ -69,10 +76,10 @@ class GameRepository {
         if (ids.isEmpty()) return emptyMap()
 
         val query = """
-        fields id,url;
-        where id = (${ids.joinToString(",")});
-        limit 100;
-    """.trimIndent()
+            fields id,url;
+            where id = (${ids.joinToString(",")});
+            limit 100;
+        """.trimIndent()
 
         val body = query.toRequestBody("text/plain".toMediaType())
 
@@ -91,10 +98,10 @@ class GameRepository {
         if (ids.isEmpty()) return emptyMap()
         val token = getToken()
         val queryPlatforms = """
-        fields id,name,platform_logo;
-        where id = (${ids.joinToString(",")});
-        limit 100;
-    """.trimIndent()
+            fields id,name,platform_logo;
+            where id = (${ids.joinToString(",")});
+            limit 100;
+        """.trimIndent()
 
         val bodyPlatforms = queryPlatforms.toRequestBody("text/plain".toMediaType())
 
@@ -108,7 +115,13 @@ class GameRepository {
             Platform(
                 id = it.id,
                 name = it.name,
-                logo = it.platform_logo ?.let { platform_logo -> logos[platform_logo] }
+                logo = it.platform_logo?.let { logoId ->
+                    logos[logoId]?.let { logo ->
+                        val newUrl = logo.url
+                            .replace("t_thumb", "t_logo_med")
+                        logo.copy(url = newUrl)
+                    }
+                }
             )
         }.associateBy { it.id }
     }
@@ -118,10 +131,10 @@ class GameRepository {
         if (ids.isEmpty()) return emptyMap()
         val token = getToken()
         val query = """
-        fields id,url;
-        where id = (${ids.joinToString(",")});
-        limit 100;
-        """.trimIndent()
+            fields id,url;
+            where id = (${ids.joinToString(",")});
+            limit 100;
+            """.trimIndent()
 
         val body = query.toRequestBody("text/plain".toMediaType())
 

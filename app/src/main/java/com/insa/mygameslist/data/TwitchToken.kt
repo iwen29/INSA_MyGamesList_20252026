@@ -1,5 +1,6 @@
 package com.insa.mygameslist.data
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.FormBody
@@ -9,7 +10,7 @@ import org.json.JSONObject
 
 suspend fun getTwitchToken(clientID: String, clientSecret: String): String {
     return withContext(Dispatchers.IO) {
-
+        Log.d("API", "Requesting Twitch token")
         val client = OkHttpClient()
 
         val url = "https://id.twitch.tv/oauth2/token" +
@@ -27,5 +28,6 @@ suspend fun getTwitchToken(clientID: String, clientSecret: String): String {
 
         val json = JSONObject(body)
         json.getString("access_token")
+
     }
 }
