@@ -10,7 +10,6 @@ import org.json.JSONObject
 
 suspend fun getTwitchToken(clientID: String, clientSecret: String): String {
     return withContext(Dispatchers.IO) {
-        Log.d("API", "Requesting Twitch token")
         val client = OkHttpClient()
 
         val url = "https://id.twitch.tv/oauth2/token" +

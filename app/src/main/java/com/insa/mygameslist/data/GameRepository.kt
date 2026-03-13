@@ -17,7 +17,6 @@ class GameRepository {
         if (cachedToken == null) {
             cachedToken = getTwitchToken(clientID, clientSecret)
         }
-        Log.d("TOKEN",cachedToken!!)
         return cachedToken!!
     }
     suspend fun getGames(): List<Game> {
