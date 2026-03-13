@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,6 +28,9 @@ import coil3.compose.AsyncImage
 import com.insa.mygameslist.R
 import com.insa.mygameslist.data.Game
 import androidx.compose.ui.graphics.Color
+import com.insa.mygameslist.ui.theme.IBMItalic
+import com.insa.mygameslist.ui.theme.IBMRegular
+
 @Composable
 fun GameCard(game: Game, onClick: () -> Unit, onFavoriteClick : () -> Unit, modifier: Modifier = Modifier) {
     Card(
@@ -53,18 +55,20 @@ fun GameCard(game: Game, onClick: () -> Unit, onFavoriteClick : () -> Unit, modi
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = game.name,
-                    textDecoration = TextDecoration.Underline,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
                     maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    fontFamily = IBMRegular,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
                 )
                 Text(
                     text = game.genres.joinToString(", ") { it.name },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    fontFamily = IBMItalic,
+                    fontWeight = FontWeight.Normal
                 )
             }
             IconButton(

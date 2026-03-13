@@ -35,12 +35,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.insa.mygameslist.R
+import com.insa.mygameslist.ui.theme.IBMItalic
+import com.insa.mygameslist.ui.theme.IBMRegular
 import com.insa.mygameslist.view.GameViewModel
 
 @SuppressLint("DefaultLocale")
@@ -57,7 +59,24 @@ fun GamePage(context: Context, gameId: Long, viewModel: GameViewModel) {
                     containerColor = Color.hsv(100f, 0.47f, 1f),
                     titleContentColor = Color.Black
                 ),
-                title = { Text(game?.name ?: "Game not found") })
+                title = { Text(
+                    text= game?.name ?: "Game not found",
+                    fontFamily = IBMItalic,
+                    fontWeight = FontWeight.Bold,
+                ) } ,
+                actions = {
+                    if (game != null) {
+                        IconButton(
+                            onClick = { viewModel.toggleFavorite(context, game.id) }
+                        ) {
+                            Icon(
+                                imageVector = if (game.isFavorite) Icons.Filled.Star else Icons.Outlined.StarBorder,
+                                contentDescription = if (game.isFavorite) "Retirer des favoris" else "Ajouter aux favoris",
+                                tint = if (game.isFavorite) Color.hsv(40f, 0.958f, 1f) else Color.Gray
+                            )
+                        }
+                    }
+                })
         },
         contentWindowInsets = WindowInsets.systemBars,
         modifier = Modifier.fillMaxSize()
@@ -67,32 +86,6 @@ fun GamePage(context: Context, gameId: Long, viewModel: GameViewModel) {
                 modifier = Modifier.padding(innerPadding).fillMaxWidth().verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.height(16.dp))
-                Row (
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ){
-                    Text(
-                        text = game.name,
-                        fontSize = 30.sp,
-                        style = MaterialTheme.typography.headlineMedium,
-                        textDecoration = TextDecoration.Underline,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.weight(1f).alignByBaseline()
-                    )
-
-                    IconButton(
-                        onClick = { viewModel.toggleFavorite(context, game.id) }
-                    ) {
-                        Icon(
-                            imageVector = if (game.isFavorite) Icons.Filled.Star else Icons.Outlined.StarBorder,
-                            contentDescription = if (game.isFavorite) "Retirer des favoris" else "Ajouter aux favoris",
-                            tint = if (game.isFavorite) Color.hsv(40f, 0.958f, 1f) else Color.Gray
-                        )
-                    }
-                }
-
                 Spacer(modifier = Modifier.height(16.dp))
 
                 AsyncImage(
@@ -112,16 +105,20 @@ fun GamePage(context: Context, gameId: Long, viewModel: GameViewModel) {
                         "Note : %.1f / 10".format(game.rating / 10)
                     else
                         "Aucune note pour le moment",
-                    style = MaterialTheme.typography.bodyMedium,
+                    fontFamily = IBMRegular,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
                 )
 
-                Spacer(modifier = Modifier.height(13.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
                     text = "Genres : ${game.genres.joinToString(", ") { it.name }}",
-                    style = MaterialTheme.typography.bodySmall,
+                    fontFamily = IBMItalic,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
                 )
@@ -151,6 +148,8 @@ fun GamePage(context: Context, gameId: Long, viewModel: GameViewModel) {
                 Text(
                     modifier = Modifier.padding(13.dp),
                     text = game.summary,
+                    fontFamily = IBMRegular,
+                    fontWeight = FontWeight.Normal,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
