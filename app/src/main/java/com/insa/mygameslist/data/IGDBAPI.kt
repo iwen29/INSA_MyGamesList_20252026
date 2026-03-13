@@ -4,11 +4,9 @@ import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import java.security.Key
 
 interface IGDBAPI {
-
-
-
     @POST("games")
     suspend fun getGames(
         @Header("Client-ID") clientId: String,
@@ -43,4 +41,11 @@ interface IGDBAPI {
         @Header("Authorization") authorization: String,
         @Body body: RequestBody
     ): List<Logo>
+
+    @POST("keywords")
+    suspend fun getKeywords(
+        @Header("Client-ID") clientId: String,
+        @Header("Authorization") authorization: String,
+        @Body body: RequestBody
+    ): List<Keyword>
 }

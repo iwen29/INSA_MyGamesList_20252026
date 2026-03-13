@@ -95,8 +95,12 @@ data class PlatformAPI(val id: Long, val name: String, val platform_logo: Long? 
 data class JsonGame(val id: Long, val cover: Long, val first_release_date: Long, val genres: List<Long>, val name: String, val platforms: List<Long>, val summary: String, val total_rating: Double)
 
 @Serializable
-data class Game(val id: Long, val cover: Cover, val release: LocalDate, val genres: Set<Genre>, val name: String, val platforms: Set<Platform>, val summary: String, val rating: Double, val isFavorite : Boolean = false)
-
+data class Game(val id: Long, val cover: Cover, val release: LocalDate, val genres: Set<Genre>, val name: String, val platforms: Set<Platform>, val summary: String, val rating: Double, val isFavorite : Boolean = false, val keywords : List<String>)
+@Serializable
+data class Keyword(
+    val id: Long,
+    val name: String
+)
 @Serializable
 data class GameAPI(
     val id: Long,
@@ -106,5 +110,7 @@ data class GameAPI(
     val first_release_date: Long? = null,
     val genres: List<Long> = emptyList(),
     val platforms: List<Long> = emptyList(),
-    val isFavorite: Boolean = false
+    val isFavorite: Boolean = false,
+    val rating: Double = 0.0,
+    val keywords : List<Long> = emptyList()
 )

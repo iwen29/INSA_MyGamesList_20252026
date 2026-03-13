@@ -43,10 +43,6 @@ fun App() {
     val pagerState = rememberPagerState() { filteredGames.size }
     val coroutineScope = rememberCoroutineScope()
 
-//    LaunchedEffect(Unit) {
-//        viewModel.loadGames(context = context)
-//    }
-
     MyGamesListTheme {
         NavHost(
             navController,

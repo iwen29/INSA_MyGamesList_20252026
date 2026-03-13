@@ -1,13 +1,11 @@
 package com.insa.mygameslist.data
 
 import android.util.Log
-import kotlinx.coroutines.async
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
-import kotlin.time.Clock
 
 class GameRepository {
 
@@ -27,7 +25,7 @@ class GameRepository {
         val token = getToken()
 
         val query = """
-            fields id,name,summary,genres,platforms,cover,first_release_date;
+            fields id,name,summary,genres,platforms,cover,first_release_date,rating,keywords;
             limit 100;
         """.trimIndent()
 
@@ -42,6 +40,9 @@ class GameRepository {
         val genres = getGenresMap()
         val platforms = getPlatformsMap(platformIds)
 
+        val keywordIds = apiGames.flatMap { it.keywords }.distinct()
+        val keywordsMap = getKeywordsMap(keywordIds)
+
         return apiGames.map { apiGame ->
 
             val coverObj = apiGame.cover?.let { covers[it] }
@@ -52,6 +53,8 @@ class GameRepository {
             val genreSet = apiGame.genres.mapNotNull { genres[it] }.toSet()
 
             val platformSet = apiGame.platforms.mapNotNull { platforms[it] }.toSet()
+
+            val keywords = apiGame.keywords.mapNotNull { keywordsMap[it]?.name }
 
             Game(
                 id = apiGame.id,
@@ -66,7 +69,8 @@ class GameRepository {
                 } ?: LocalDate.fromEpochDays(0),
                 genres = genreSet,
                 platforms = platformSet,
-                rating = 0.0
+                rating = apiGame.rating,
+                keywords = keywords
             )
         }
     }
@@ -139,5 +143,22 @@ class GameRepository {
         val body = query.toRequestBody("text/plain".toMediaType())
 
         return RetrofitClient.api.getLogos(clientID,"Bearer $token",body).associateBy { it.id }
+    }
+    private suspend fun getKeywordsMap(ids: List<Long>): Map<Long, Keyword> {
+
+        if (ids.isEmpty()) return emptyMap()
+
+        val token = getToken()
+
+        val query = """
+            fields id,name;
+            where id = (${ids.joinToString(",")});
+            limit 100;
+        """.trimIndent()
+
+        val body = query.toRequestBody("text/plain".toMediaType())
+
+        return RetrofitClient.api.getKeywords(clientID, "Bearer $token", body)
+            .associateBy { it.id }
     }
 }

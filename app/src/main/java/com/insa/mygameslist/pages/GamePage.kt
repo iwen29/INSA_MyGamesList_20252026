@@ -1,7 +1,7 @@
 package com.insa.mygameslist.pages
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,7 +20,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -35,7 +34,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -43,9 +41,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.insa.mygameslist.R
-//import com.insa.mygameslist.data.IGDB
 import com.insa.mygameslist.view.GameViewModel
 
+@SuppressLint("DefaultLocale")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GamePage(context: Context, gameId: Long, viewModel: GameViewModel) {
@@ -110,12 +108,23 @@ fun GamePage(context: Context, gameId: Long, viewModel: GameViewModel) {
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
-                    game.genres.joinToString(", ") { it.name },
-                    style = MaterialTheme.typography.bodySmall,
+                    text = if (game.rating > 0.0)
+                        "Note : %.1f / 10".format(game.rating / 10)
+                    else
+                        "Aucune note pour le moment",
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
                 )
 
+                Spacer(modifier = Modifier.height(13.dp))
+
+                Text(
+                    text = "Genres : ${game.genres.joinToString(", ") { it.name }}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center
+                )
                 Spacer(modifier = Modifier.height(13.dp))
 
                 Row(modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),

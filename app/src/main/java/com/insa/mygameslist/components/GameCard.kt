@@ -60,7 +60,7 @@ fun GameCard(game: Game, onClick: () -> Unit, onFavoriteClick : () -> Unit, modi
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = "Genres : ${game.genres.joinToString(", ") { it.name }}",
+                    text = game.genres.joinToString(", ") { it.name },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
@@ -79,14 +79,3 @@ fun GameCard(game: Game, onClick: () -> Unit, onFavoriteClick : () -> Unit, modi
         }
     }
 }
-
-
-//@Preview(showBackground = true)
-//@Composable
-//fun GameCardsPreview() {
-//    GameCard(
-//        title = "TEST",
-//        genres = listOf("Genre1", "Genre2aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "Genre3", "Genre4","Genre5","Genre6"),
-//        imageUrl = "TEST"
-//    )
-//}
