@@ -1,5 +1,6 @@
 package com.insa.mygameslist
 
+import android.util.Log
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
@@ -7,6 +8,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -28,6 +30,8 @@ fun App() {
 
     var searchQuery by remember { mutableStateOf("") }
     val context = LocalContext.current
+
+    var searchTags = remember { mutableStateSetOf<String>() }
 
     val gamesState = viewModel.games.collectAsState()
     val games = gamesState.value
@@ -63,6 +67,11 @@ fun App() {
                     },
                     query = searchQuery,
                     onQueryChange = { newQuery -> searchQuery = newQuery },
+                    tags = searchTags,
+                    setTags = {
+                        Log.d("GamesList", "Updating search tags: $it")
+                        searchTags.apply { clear(); addAll(it) }
+                              },
                     games = filteredGames
                 )
             }
@@ -70,7 +79,8 @@ fun App() {
                 "game"
             ) {
                 HorizontalPager(pagerState) { page ->
-                    GamePage(context, gameId = filteredGames[page].id,viewModel = viewModel,)
+                    val frozenGames = remember { filteredGames.toList() }
+                    GamePage(context, gameId = frozenGames[page].id,viewModel = viewModel,)
                 }
             }
         }

@@ -17,6 +17,7 @@ lifecycleRuntimeKtx = "2.10.0"
 okhttp-logging = "5.3.2"
 retrofit = "3.0.0"
 viewmodel-compose = "2.10.0"
+material = "1.13.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -49,6 +50,7 @@ kotlinx-serialization-json-v163 = { module = "org.jetbrains.kotlinx:kotlinx-seri
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp-logging" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-kotlinx-serialization = { group = 'com.squareup.retrofit2', name = 'converter-kotlinx-serialization', version.ref = 'retrofit' }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -129,9 +129,9 @@ fun GamePage(context: Context, gameId: Long, viewModel: GameViewModel) {
                     for(p in game.platforms){
 
                         var imageUrl = "https:${p.logo?.url}"
-                        if(imageUrl.endsWith("jpg")){
+                        /*if(imageUrl.endsWith("jpg")){
                             imageUrl = imageUrl.replace("jpg","png")
-                        }
+                        }*/
 
                         AsyncImage(
                             model = imageUrl,

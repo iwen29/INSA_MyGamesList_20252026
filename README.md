@@ -11,5 +11,8 @@ Base :
 - Mise en favori depuis la liste des jeux ou la page de détails, affichant les jeux favoris en haut de la liste
 
 Bonus :
+- Obtention des données par l'API IGDB
+- Support du thème sombre
 - Liste de favoris persistante
 - Possibilité de naviguer entre les pages des jeux (prenant en compte le filtrage)
+- Filtrage par tags
