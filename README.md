@@ -1,6 +1,6 @@
 # Projet de Programmation Mobile
 
-Ce projet est une simple application listante les jeux d'une base de données.
+Ce projet est une simple application listant les jeux d'une base de données.
 
 ## Fonctionnalités
 
