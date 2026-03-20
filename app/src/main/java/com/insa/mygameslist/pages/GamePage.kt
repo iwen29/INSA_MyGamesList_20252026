@@ -2,6 +2,7 @@ package com.insa.mygameslist.pages
 
 import android.annotation.SuppressLint
 import android.content.Context
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -62,10 +63,9 @@ fun GamePage(context: Context, gameId: Long, viewModel: GameViewModel) {
                 ),
                 title = { Text(
                     text= game?.name ?: "Game not found",
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
                     fontFamily = IBMItalic,
                     fontWeight = FontWeight.Bold,
+                    modifier = Modifier.fillMaxWidth().basicMarquee(repeatDelayMillis = 1500, initialDelayMillis = 1500, velocity = 60.dp)
                 ) } ,
                 actions = {
                     if (game != null) {
