@@ -38,7 +38,7 @@ fun App() {
 
     val filteredGames = games.filter { game -> //TODO: Make platform and rating tags work
         (searchQuery.isEmpty() || (game.name.contains(searchQuery, ignoreCase = true) || game.genres.any { it.name.contains(searchQuery, ignoreCase = true) } || game.platforms.any { it.name.contains(searchQuery, ignoreCase = true) }))
-                && searchTags.all { tag -> game.genres.any { it.name.equals(tag, ignoreCase = true) } || game.platforms.any { it.name.equals(tag, ignoreCase = true) } }
+                && searchTags.all { tag -> game.genres.any { it.name.equals(tag, ignoreCase = true) } || game.platforms.any { it.name.equals(tag, ignoreCase = true) || it.alternativeName.equals(tag, ignoreCase = true) || it.abbreviation.equals(tag, ignoreCase = true) || it.slug.equals(tag, ignoreCase = true) } }
     }.sortedBy { it.name }.sortedBy { !it.isFavorite }
 
     val pagerState = rememberPagerState() { filteredGames.size }

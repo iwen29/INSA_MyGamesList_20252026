@@ -102,7 +102,7 @@ class GameRepository {
         if (ids.isEmpty()) return emptyMap()
         val token = getToken()
         val queryPlatforms = """
-            fields id,name,platform_logo;
+            fields id,name,alternative_name,abbreviation,slug,platform_logo;
             where id = (${ids.joinToString(",")});
             limit 100;
         """.trimIndent()
@@ -119,6 +119,9 @@ class GameRepository {
             Platform(
                 id = it.id,
                 name = it.name,
+                alternativeName = it.alternative_name,
+                abbreviation = it.abbreviation,
+                slug = it.slug,
                 logo = it.platform_logo?.let { logoId ->
                     logos[logoId]?.let { logo ->
                         val newUrl = logo.url

@@ -83,16 +83,10 @@ data class Genre(val id: Long, val name: String)
 data class Logo(val id: Long, val url: String)
 
 @Serializable
-data class JsonPlatform(val id: Long, val name: String, val platform_logo: Long?)
+data class Platform(val id: Long, val name: String, val alternativeName: String?, val abbreviation: String?, val slug: String, val logo: Logo?)
 
 @Serializable
-data class Platform(val id: Long, val name: String, val logo: Logo?)
-
-@Serializable
-data class PlatformAPI(val id: Long, val name: String, val platform_logo: Long? = null)
-
-@Serializable
-data class JsonGame(val id: Long, val cover: Long, val first_release_date: Long, val genres: List<Long>, val name: String, val platforms: List<Long>, val summary: String, val total_rating: Double)
+data class PlatformAPI(val id: Long, val name: String, val alternative_name: String? = null, val abbreviation: String? = null, val slug: String, val platform_logo: Long? = null)
 
 @Serializable
 data class Game(val id: Long, val cover: Cover, val release: LocalDate, val genres: Set<Genre>, val name: String, val platforms: Set<Platform>, val summary: String, val rating: Double, val isFavorite : Boolean = false, val keywords : List<String>)

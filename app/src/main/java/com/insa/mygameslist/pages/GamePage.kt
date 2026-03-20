@@ -115,16 +115,18 @@ fun GamePage(context: Context, gameId: Long, viewModel: GameViewModel) {
                     textAlign = TextAlign.Center
                 )
 
-                Spacer(modifier = Modifier.height(4.dp))
+                if (!game.genres.isEmpty()) {
+                    Spacer(modifier = Modifier.height(4.dp))
 
-                Text(
-                    text = "Genres : ${game.genres.joinToString(", ") { it.name }}",
-                    fontFamily = IBMItalic,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 13.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center
-                )
+                    Text(
+                        text = "Genres : ${game.genres.joinToString(", ") { it.name }}",
+                        fontFamily = IBMItalic,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 13.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center
+                    )
+                }
                 Spacer(modifier = Modifier.height(13.dp))
 
                 Row(modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
@@ -132,9 +134,9 @@ fun GamePage(context: Context, gameId: Long, viewModel: GameViewModel) {
                     for(p in game.platforms){
 
                         var imageUrl = "https:${p.logo?.url}"
-                        /*if(imageUrl.endsWith("jpg")){
+                        if(imageUrl.endsWith("jpg")){
                             imageUrl = imageUrl.replace("jpg","png")
-                        }*/
+                        }
 
                         AsyncImage(
                             model = imageUrl,
