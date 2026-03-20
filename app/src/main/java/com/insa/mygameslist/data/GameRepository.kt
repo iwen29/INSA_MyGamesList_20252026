@@ -26,6 +26,7 @@ class GameRepository {
 
         val query = """
             fields id,name,summary,genres,platforms,cover,first_release_date,rating,keywords;
+            sort rating desc;
             limit 100;
         """.trimIndent()
 
