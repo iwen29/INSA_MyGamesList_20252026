@@ -1,5 +1,5 @@
 # Projet de Programmation Mobile
-
+Réalisé par Iwen NUSS et Hector VERNET.
 Ce projet est une simple application listant les jeux d'une base de données.
 
 ## Fonctionnalités
